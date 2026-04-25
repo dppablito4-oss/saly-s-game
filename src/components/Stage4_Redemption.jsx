@@ -3,12 +3,11 @@ import React, { useState, useEffect, useRef } from 'react';
 const FULL_TEXT = `Sé que lo que dije no fue justo.
 
 "Decir que era tu 'descuido' fue un error; 
-lo que realmente necesitaba decirte era que quería estar ahí para 
-cuidarte. No era momento de juzgar, sino de acompañarte.
+lo que realmente necesitaba decirte era que quería estar ahí para cuidarte. 
+No era momento de juzgar, sino de acompañarte.
 
-Sé que ya me perdonaste, pero quería construirte este 
-rincón virtual. Porque un 'okey' tuyo vale muchísimo para mí, 
-y quería esforzarme para estar a la altura de lo que mereces.
+Sé que ya me perdonaste, pero quería construirte este rincón virtual.
+Porque un 'okey' tuyo vale muchísimo para mí, y quería esforzarme para estar a la altura de lo que mereces.
 
 ¿Ya tienes calor, Saly? 🥺`;
 
@@ -68,7 +67,7 @@ export default function Stage4_Redemption() {
     e.preventDefault();
     setFormStatus('sending');
     const formData = new FormData(e.target);
-    
+
     try {
       const response = await fetch('https://formspree.io/f/mykloova', {
         method: 'POST',
@@ -181,7 +180,7 @@ export default function Stage4_Redemption() {
               <p className="text-xl mb-4" style={{ fontFamily: "'Caveat', cursive", color: '#fde68a' }}>
                 ✨ Gracias, Saly. Prometo pensar antes de hablar. ✨
               </p>
-              <div 
+              <div
                 onClick={() => setCandyPhase('play')}
                 className="inline-block cursor-pointer p-4 rounded-2xl bg-amber-950/40 border border-amber-600/30 hover:bg-amber-900/50 transition-all hover:scale-105"
               >
@@ -202,10 +201,10 @@ export default function Stage4_Redemption() {
           <p className="text-base mb-8 text-amber-900/80" style={{ fontFamily: "'Caveat', cursive" }}>
             Así que te envío todos estos. Toca cada uno para comerlo:
           </p>
-          
+
           <div className="grid grid-cols-3 gap-6 mb-8 px-4">
             {candies.map(candy => (
-              <div 
+              <div
                 key={candy.id}
                 onClick={() => !candy.eaten && eatCandy(candy.id)}
                 className={`flex flex-col items-center justify-center p-4 rounded-2xl transition-all duration-500
@@ -229,8 +228,8 @@ export default function Stage4_Redemption() {
         <div className="relative z-10 w-full max-w-md text-center animate-fade-in">
           <div className="text-6xl mb-6">🍭✨❤️</div>
           <p className="text-2xl leading-relaxed mb-10 px-4" style={{ fontFamily: "'Caveat', cursive", color: '#fde68a' }}>
-            Espero que te hayas divertido un poquito... <br/><br/>
-            Y espero que esta vez sí te dejes comprar un dulce para que endulces tus hermosos labios. 👄💛
+            Espero que te hayas divertido un poquito... <br /><br />
+            Y espero que esta vez sí te dejes comprar un dulce para que endulces esus labios tan...
           </p>
 
           <div className="p-8 rounded-3xl bg-white/5 border border-amber-900/20 text-left mb-8 shadow-2xl">
@@ -241,9 +240,9 @@ export default function Stage4_Redemption() {
               <div className="py-8 text-center animate-fade-in">
                 <p className="text-2xl mb-2">✨💌✨</p>
                 <p className="text-xl" style={{ fontFamily: "'Caveat', cursive", color: '#fbbf24' }}>
-                  ¡Mensaje enviado con éxito! <br/> Gracias por escribirme, Saly.
+                  ¡Mensaje enviado con éxito! <br /> Gracias por escribirme, Saly.
                 </p>
-                <button 
+                <button
                   onClick={() => setFormStatus('idle')}
                   className="mt-4 text-xs text-amber-900/40 hover:text-amber-500 underline"
                 >
@@ -252,7 +251,7 @@ export default function Stage4_Redemption() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-                <textarea 
+                <textarea
                   name="mensaje"
                   placeholder="Escribe aquí..."
                   className="w-full p-3 rounded-xl bg-black/40 border border-amber-900/30 text-amber-100 placeholder-amber-900/40 focus:outline-none focus:border-amber-500 transition-colors"
@@ -261,12 +260,12 @@ export default function Stage4_Redemption() {
                   required
                   disabled={formStatus === 'sending'}
                 ></textarea>
-                <button 
+                <button
                   type="submit"
                   disabled={formStatus === 'sending'}
                   className={`px-6 py-2 rounded-xl font-bold text-white transition-all duration-300 hover:scale-105 active:scale-95 self-end ${formStatus === 'sending' ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  style={{ 
-                    fontFamily: "'Caveat', cursive", 
+                  style={{
+                    fontFamily: "'Caveat', cursive",
                     background: 'linear-gradient(135deg, #b45309, #d97706)',
                     fontSize: '1rem'
                   }}
@@ -278,12 +277,12 @@ export default function Stage4_Redemption() {
                 )}
               </form>
             )}
-            
+
             <div className="mt-8 pt-4 border-t border-amber-900/10 text-center">
               <p className="text-[10px] uppercase tracking-widest text-slate-600 mb-4">
                 Developed by Samuel (pablitodp)
               </p>
-              <a 
+              <a
                 href="https://wa.me/51918165428?text=He%20visto%20lo%20que%20enviaste%20y%20..."
                 target="_blank"
                 rel="noopener noreferrer"
@@ -291,7 +290,7 @@ export default function Stage4_Redemption() {
                 style={{ fontFamily: "'Inter', sans-serif" }}
               >
                 <span>¿Prefieres avisarme por WhatsApp?</span>
-                <span className="bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full text-[10px]">918165428</span>
+                <span className="bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full text-[10px]">SAMUEL P.</span>
               </a>
             </div>
           </div>
