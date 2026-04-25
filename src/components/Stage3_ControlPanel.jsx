@@ -37,6 +37,15 @@ const CARDS = [
     bg: 'rgba(6,78,59,0.2)',
     border: 'rgba(110,231,183,0.15)',
   },
+  {
+    emoji: '✨',
+    title: 'Lo más importante,',
+    body: 'Para mí no eres una persona más. Eres única, con tus cosas, tus dramas y tu frío. Y así me encantas. No cambies por nada.',
+    from: '— de corazón',
+    color: '#fb7185',
+    bg: 'rgba(159,18,57,0.18)',
+    border: 'rgba(251,113,133,0.2)',
+  },
 ];
 
 function playOpenSound() {
