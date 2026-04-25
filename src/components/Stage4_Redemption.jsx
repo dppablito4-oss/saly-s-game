@@ -140,9 +140,40 @@ export default function Stage4_Redemption() {
         {/* After forgive */}
         {forgiven && (
           <div className="mt-8 text-center animate-fade-in">
-            <p className="text-xl" style={{ fontFamily: "'Caveat', cursive", color: '#fde68a' }}>
+            <p className="text-xl mb-6" style={{ fontFamily: "'Caveat', cursive", color: '#fde68a' }}>
               ✨ Gracias, Saly. Prometo pensar antes de hablar. ✨
             </p>
+            
+            <div className="mt-8 p-6 rounded-2xl bg-white/5 border border-amber-900/20 text-left">
+              <p className="text-sm mb-4" style={{ fontFamily: "'Caveat', cursive", color: '#a16207' }}>
+                Si quieres decirme algo (aunque sea para seguir riñéndome), puedes escribirlo aquí y me llegará directo:
+              </p>
+              <form 
+                action="https://formspree.io/f/TU_ID_AQUÍ" 
+                method="POST"
+                className="flex flex-col gap-3"
+              >
+                <textarea 
+                  name="mensaje"
+                  placeholder="Escribe aquí..."
+                  className="w-full p-3 rounded-xl bg-black/40 border border-amber-900/30 text-amber-100 placeholder-amber-900/40 focus:outline-none focus:border-amber-500 transition-colors"
+                  style={{ fontFamily: "'Caveat', cursive", fontSize: '1.1rem' }}
+                  rows="3"
+                  required
+                ></textarea>
+                <button 
+                  type="submit"
+                  className="px-6 py-2 rounded-xl font-bold text-white transition-all duration-300 hover:scale-105 active:scale-95 self-end"
+                  style={{ 
+                    fontFamily: "'Caveat', cursive", 
+                    background: 'linear-gradient(135deg, #b45309, #d97706)',
+                    fontSize: '1rem'
+                  }}
+                >
+                  Enviar respuesta ✉️
+                </button>
+              </form>
+            </div>
           </div>
         )}
       </div>
