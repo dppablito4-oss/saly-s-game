@@ -3,117 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Survival Quest: El Distrito Remoto</title>
+    <title>Misión Punchao ❤️</title>
     <style>
         :root {
-            --bg-color: #0b0e14;
-            --text-color: #e0e0e0;
-            --accent-color: #ff4b2b;
+            --romance-pink: #ff85a2;
+            --rain-blue: #a2d2ff;
+            --mud-brown: #795548;
+            --soft-white: #f8f9fa;
         }
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, #2c3e50 0%, #000000 100%);
+            color: var(--soft-white);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
             overflow: hidden;
         }
-        #game-container {
-            max-width: 600px;
-            padding: 20px;
-            border: 2px solid var(--accent-color);
-            background: rgba(0, 0, 0, 0.8);
-            box-shadow: 0 0 20px rgba(255, 75, 43, 0.3);
+        #game-box {
+            width: 90%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
             text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
         }
-        .message { font-size: 1.2rem; margin-bottom: 20px; line-height: 1.5; }
-        .choices { display: flex; flex-direction: column; gap: 10px; }
+        .icon { font-size: 50px; margin-bottom: 20px; display: block; }
+        h1 { font-size: 1.5rem; color: var(--romance-pink); }
+        p { line-height: 1.6; font-size: 1.1rem; }
+        .btn-container { display: flex; flex-direction: column; gap: 15px; margin-top: 25px; }
         button {
-            background: transparent;
-            border: 1px solid var(--accent-color);
-            color: var(--accent-color);
-            padding: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 1rem;
-        }
-        button:hover {
-            background: var(--accent-color);
+            background: var(--romance-pink);
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
             color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
-        .hidden { display: none; }
+        button:hover { transform: scale(1.05); background: #ff4d7d; }
+        .footer-note { font-size: 0.8rem; margin-top: 20px; opacity: 0.6; }
+        /* Animación de lluvia simple */
+        .rain-drop { position: absolute; background: white; width: 1px; height: 10px; opacity: 0.2; }
     </style>
 </head>
 <body>
 
-<div id="game-container">
-    <div id="scene-content">
-        <p class="message" id="text-display">Cargando aventura...</p>
-        <div class="choices" id="choice-buttons"></div>
+<div id="game-box">
+    <div id="content">
+        <span class="icon">⛰️</span>
+        <h1>Camino a Punchao</h1>
+        <p>Estás llegando al distrito, el cielo se puso gris y el camino tiene mucho barro. De pronto... ¡empieza a llover fuerte!</p>
+        <div class="btn-container">
+            <button onclick="nextStep('rain')">¿Qué hago? No traje paraguas...</button>
+        </div>
     </div>
+    <div class="footer-note">Hecho por Samuel con mucho cariño</div>
 </div>
 
 <script>
-    const story = {
-        start: {
-            text: "Te encuentras en un distrito remoto. El cielo se oscurece y empieza a caer una lluvia torrencial. Tienes frío y olvidaste tu cambio de ropa. ¿Qué haces?",
-            choices: [
-                { text: "Buscar refugio y quejarme", next: "complain" },
-                { text: "Llamar a Pablo para que me regañe", next: "pablo_scold" }
+    const scenes = {
+        rain: {
+            icon: "☂️",
+            title: "¡Espera!",
+            text: "Aparece un Samuel virtual corriendo con un paraguas gigante. <br><br><i>'No dejaré que te caiga ni una gota, aunque esté a kilómetros de distancia'.</i>",
+            options: [
+                { text: "Caminar juntos bajo el paraguas", next: "mud" }
             ]
         },
-        complain: {
-            text: "Estás bajo un techo, pero el frío aumenta. De pronto, aparece un mensaje en tu celular: '¿Ya ves? Te lo dije'. Sientes un golpe crítico en tus sentimientos. (-50 HP)",
-            choices: [
-                { text: "Perdonar al despistado de Pablo", next: "forgive" },
-                { text: "Congelarme de orgullo", next: "freeze" }
+        mud: {
+            icon: "👞",
+            title: "El barro de Punchao",
+            text: "El camino está difícil y tus zapatos se están manchando. Te da frío en los pies.",
+            options: [
+                { text: "Samuel tiene un cambio de ropa listo", next: "sorry" }
             ]
         },
-        pablo_scold: {
-            text: "Pablo dice: 'Debiste preverlo...'. La frialdad de sus palabras es más fuerte que la lluvia. Te das cuenta de que tiene razón, pero ¡qué hiriente!",
-            choices: [
-                { text: "Aceptar las disculpas (él ya se siente mal)", next: "forgive" },
-                { text: "Ignorarlo y buscar un chocolate caliente", next: "chocolate" }
+        sorry: {
+            icon: "💝",
+            title: "Lo siento mucho",
+            text: "En lugar de decirte 'debiste preverlo', prefiero decirte esto: <br><br> Me dolió saber que tenías frío y no podía estar ahí para cubrirte. Mis palabras fueron frías como la lluvia de Punchao, pero mi intención era solo cuidarte (aunque lo dije mal).",
+            options: [
+                { text: "Samuel, ¿me perdonas?", next: "final" }
             ]
         },
-        freeze: {
-            text: "Te has convertido en una estatua de hielo. Pablo viajará hasta allá con una secadora de pelo para descongelarte y pedirte perdón mil veces.",
-            choices: [{ text: "Reiniciar destino", next: "start" }]
-        },
-        chocolate: {
-            text: "Encuentras chocolate, pero no tiene azúcar. Como el comentario de Pablo. Al final, ambos saben que se quieren a pesar de la lluvia.",
-            choices: [{ text: "Ver mensaje final", next: "forgive" }]
-        },
-        forgive: {
-            text: "¡LOGRO DESBLOQUEADO: PERDÓN OBTENIDO! <br><br> Prometo que la próxima vez, en lugar de decirte 'te lo dije', estaré ahí con una casaca lista o al menos un mensaje que te de calorcito. ¿Me perdonas?",
-            choices: [{ text: "Sí, acepto (y traeré paraguas)", next: "finish" }]
-        },
-        finish: {
-            text: "❤️ Misión cumplida. Vuelve pronto, que aquí te espera un café (y cero regaños).",
-            choices: []
+        final: {
+            icon: "☕",
+            title: "Promesa de Samuel",
+            text: "La próxima vez, no importa si olvidas el abrigo, yo llevaré dos. O mejor aún, iré yo mismo a Punchao a llevarte un café caliente. <br><br> Te quiero mucho.",
+            options: [
+                { text: "Reiniciar aventura", next: "start" }
+            ]
         }
     };
 
-    function loadScene(sceneKey) {
-        const scene = story[sceneKey];
-        const textDisplay = document.getElementById('text-display');
-        const choiceButtons = document.getElementById('choice-buttons');
-
-        textDisplay.innerHTML = scene.text;
-        choiceButtons.innerHTML = '';
-
-        scene.choices.forEach(choice => {
-            const btn = document.createElement('button');
-            btn.innerText = choice.text;
-            btn.onclick = () => loadScene(choice.next);
-            choiceButtons.appendChild(btn);
-        });
+    function nextStep(step) {
+        const content = document.getElementById('content');
+        if(step === 'start') location.reload();
+        
+        const s = scenes[step];
+        content.innerHTML = `
+            <span class="icon">${s.icon}</span>
+            <h1>${s.title}</h1>
+            <p>${s.text}</p>
+            <div class="btn-container">
+                ${s.options.map(o => `<button onclick="nextStep('${o.next}')">${o.text}</button>`).join('')}
+            </div>
+        `;
     }
 
-    loadScene('start');
+    // Crear lluvia de fondo
+    for (let i = 0; i < 50; i++) {
+        const drop = document.createElement('div');
+        drop.className = 'rain-drop';
+        drop.style.left = Math.random() * 100 + 'vw';
+        drop.style.animationDuration = Math.random() * 2 + 1 + 's';
+        drop.style.top = Math.random() * 100 + 'vh';
+        document.body.appendChild(drop);
+    }
 </script>
 
 </body>
