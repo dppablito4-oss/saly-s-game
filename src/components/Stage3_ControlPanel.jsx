@@ -31,7 +31,7 @@ const CARDS = [
   {
     emoji: '🍃',
     title: 'Una cosita más,',
-    body: 'No sé bien lo que somos. Pero sé que cuando no hablo contigo, algo falta. Y eso vale mucho para mí.',
+    body: 'Eres ese algo que me falta para estar bien, y por eso cuidarte es lo único que me importa ahora',
     from: '— Samuel 🥺',
     color: '#6ee7b7',
     bg: 'rgba(6,78,59,0.2)',
@@ -60,7 +60,7 @@ function playOpenSound() {
     gain.gain.setValueAtTime(0.12, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
     osc.start(); osc.stop(ctx.currentTime + 0.35);
-  } catch(e) {}
+  } catch (e) { }
 }
 
 export default function Stage3_ControlPanel({ onNext }) {
