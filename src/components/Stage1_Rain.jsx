@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-const DROPS = 120;
+const DROPS = 140;
 
 export default function Stage1_Rain({ onActivate }) {
   const rainRef = useRef(null);
@@ -22,42 +22,57 @@ export default function Stage1_Rain({ onActivate }) {
   }, []);
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-night-blue">
+    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, #060d1f 0%, #0a1628 60%, #0d1117 100%)' }}>
+
       {/* Rain */}
       <div ref={rainRef} className="rain-container" />
 
       {/* Fog overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-transparent to-slate-900/90 pointer-events-none z-0" />
+      <div className="absolute inset-0 pointer-events-none z-0"
+        style={{ background: 'linear-gradient(180deg, rgba(10,22,40,0.7) 0%, transparent 50%, rgba(10,22,40,0.85) 100%)' }} />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center gap-8 px-6 text-center max-w-2xl">
-        {/* Status Terminal */}
-        <div className="border border-slate-600 bg-slate-900/80 backdrop-blur-sm rounded-xl p-6 text-left w-full font-mono shadow-2xl">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-3 h-3 rounded-full bg-red-500" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500" />
-            <div className="w-3 h-3 rounded-full bg-green-500" />
-            <span className="text-slate-500 text-xs ml-2">sistema_calorcito.exe</span>
+      <div className="relative z-10 flex flex-col items-center gap-6 px-4 text-center max-w-lg w-full">
+
+        {/* Distrito badge */}
+        <div className="flex items-center gap-2 text-slate-500 text-xs font-mono tracking-widest uppercase">
+          <span className="inline-block w-4 h-px bg-slate-600" />
+          Distrito de Punchao — Lima, Perú
+          <span className="inline-block w-4 h-px bg-slate-600" />
+        </div>
+
+        {/* Terminal */}
+        <div className="border border-slate-700/80 bg-slate-900/90 backdrop-blur-sm rounded-2xl p-6 text-left w-full shadow-2xl shadow-black/60">
+          <div className="flex items-center gap-1.5 mb-5">
+            <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
+            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+            <span className="text-slate-600 text-xs ml-2 font-mono">protocolo_calorcito.exe</span>
           </div>
-          <TerminalLine delay={0} text="● Escaneando distrito de Punchao..." />
-          <TerminalLine delay={600} text="● Temperatura detectada: [ FRÍO EXTREMO ]" color="text-blue-400" />
-          <TerminalLine delay={1200} text="● Humedad: [ BARRO. MUCHO BARRO ]" color="text-yellow-400" />
-          <TerminalLine delay={1800} text="● Ropa: [ MOJADA ]" color="text-yellow-400" />
-          <TerminalLine delay={2400} text="● Estado de Saly: [ ★ ENOJADA CON SAMUEL ★ ]" color="text-red-400" />
-          <TerminalLine delay={3000} text="● Causa del problema: Samuel dijo algo estúpido." color="text-red-300" />
-          <TerminalLine delay={3600} text="▸ Iniciando PROTOCOLO DE CALORCITO..." color="text-emerald-400" blink />
+
+          <TerminalLine delay={200} text="● Escaneando distrito de Punchao..." />
+          <TerminalLine delay={900} text="● Temperatura: [ FRÍO. MUCHO FRÍO ]" color="text-blue-400" />
+          <TerminalLine delay={1600} text="● Carreteras: [ BARROOOO ]" color="text-yellow-400" />
+          <TerminalLine delay={2300} text="● Ropa de Saly: [ MOJADA ]" color="text-yellow-400" />
+          <TerminalLine delay={3000} text='● Cambio de ropa llevado: [ NO 🥺 ]' color="text-orange-400" />
+          <TerminalLine delay={3700} text="● Tiendas cercanas: [ Solo de dulces ]" color="text-slate-400" />
+          <TerminalLine delay={4400} text='● Error detectado: Samuel dijo "te enfermas por descuido tuyo"' color="text-red-400" />
+          <TerminalLine delay={5200} text='● Respuesta de Saly: "💔' color="text-red-300" />
+          <TerminalLine delay={6000} text="● Estado actual de Saly: [ Está bien, te perdono 🥺 ]" color="text-emerald-400" />
+          <TerminalLine delay={6800} text="▸ Iniciando PROTOCOLO DE CAFESITO CALIENTE v3.0..." color="text-amber-400" blink />
         </div>
 
         {/* Button */}
         <button
           onClick={onActivate}
-          className="mt-2 px-8 py-4 text-lg font-bold rounded-xl cursor-pointer
-            bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400
-            text-white shadow-lg shadow-amber-900/50
-            border border-amber-400/40
-            transition-all duration-300 hover:scale-105 hover:shadow-amber-700/60 active:scale-95
-            tracking-wide"
-          style={{ fontFamily: 'Inter, sans-serif' }}
+          className="px-8 py-4 text-base font-bold rounded-xl cursor-pointer text-white tracking-wide
+            transition-all duration-300 hover:scale-105 active:scale-95"
+          style={{
+            background: 'linear-gradient(135deg, #b45309, #d97706)',
+            boxShadow: '0 8px 32px rgba(180,83,9,0.4)',
+            fontFamily: 'Inter, sans-serif'
+          }}
         >
           [ Activar Protocolo de Calorcito ]
         </button>
@@ -66,17 +81,18 @@ export default function Stage1_Rain({ onActivate }) {
   );
 }
 
-function TerminalLine({ text, color = 'text-slate-300', delay, blink }) {
+function TerminalLine({ text, color = 'text-slate-400', delay, blink }) {
   const [visible, setVisible] = React.useState(false);
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), delay);
     return () => clearTimeout(t);
   }, [delay]);
 
-  if (!visible) return <div className="h-5 mb-1" />;
+  if (!visible) return <div className="h-5 mb-1.5" />;
 
   return (
-    <div className={`text-sm mb-1 ${color} ${blink ? 'animate-pulse' : ''} transition-opacity duration-500`}>
+    <div className={`text-sm mb-1.5 font-mono ${color} ${blink ? 'animate-pulse' : ''}`}
+      style={{ animation: visible ? 'fade-in 0.4s ease forwards' : 'none' }}>
       {text}
     </div>
   );
