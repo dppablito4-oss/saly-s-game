@@ -1,151 +1,163 @@
-import React, { useState } from 'react';
-import { gsap } from 'gsap';
+import React, { useState, useEffect } from 'react';
 
-function playToggleSound(on) {
+const CARDS = [
+  {
+    emoji: '🌟',
+    title: 'Para Saly,',
+    body: 'Eres de las personas más especiales que han entrado en mi vida. No lo digo de relleno — lo digo porque es verdad.',
+    from: '— Samuel',
+    color: '#fbbf24',
+    bg: 'rgba(120,53,15,0.25)',
+    border: 'rgba(251,191,36,0.2)',
+  },
+  {
+    emoji: '🌧️',
+    title: 'Sobre el frío de hoy,',
+    body: 'Sé que el barro de Punchao no estaba fácil. Y sé que mis palabras te hicieron más frío todavía. Lo siento de verdad.',
+    from: '— el tonto de Samuel',
+    color: '#93c5fd',
+    bg: 'rgba(29,78,216,0.15)',
+    border: 'rgba(147,197,253,0.2)',
+  },
+  {
+    emoji: '💛',
+    title: 'Lo que quiero que sepas,',
+    body: 'Me importa cómo estás. Me importa si tienes frío, si te mojaste, si las carreteras están horrible. Me importas tú.',
+    from: '— siempre',
+    color: '#fde68a',
+    bg: 'rgba(180,83,9,0.2)',
+    border: 'rgba(253,230,138,0.2)',
+  },
+  {
+    emoji: '🍃',
+    title: 'Una cosita más,',
+    body: 'No sé bien lo que somos. Pero sé que cuando no hablo contigo, algo falta. Y eso vale mucho para mí.',
+    from: '— Samuel 🥺',
+    color: '#6ee7b7',
+    bg: 'rgba(6,78,59,0.2)',
+    border: 'rgba(110,231,183,0.15)',
+  },
+];
+
+function playOpenSound() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain); gain.connect(ctx.destination);
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(on ? 660 : 330, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(on ? 880 : 220, ctx.currentTime + 0.1);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(400, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(700, ctx.currentTime + 0.2);
     gain.gain.setValueAtTime(0.12, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-    osc.start(); osc.stop(ctx.currentTime + 0.15);
-  } catch(e) {}
-}
-
-function playPopSound() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const buf = ctx.createBuffer(1, ctx.sampleRate * 0.12, ctx.sampleRate);
-    const data = buf.getChannelData(0);
-    for (let i = 0; i < data.length; i++)
-      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data.length, 2);
-    const src = ctx.createBufferSource();
-    src.buffer = buf;
-    const gain = ctx.createGain(); gain.gain.value = 0.4;
-    src.connect(gain); gain.connect(ctx.destination);
-    src.start();
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+    osc.start(); osc.stop(ctx.currentTime + 0.35);
   } catch(e) {}
 }
 
 export default function Stage3_ControlPanel({ onNext }) {
-  const [sw, setSw] = useState({ dry: false, mud: false, samuel: false });
-  const [glowOrange, setGlowOrange] = useState(false);
-  const [showMud, setShowMud] = useState(false);
+  const [opened, setOpened] = useState([]); // índices de cartas abiertas
+  const [current, setCurrent] = useState(0); // carta activa/visible
 
-  const toggle = (key) => {
-    const newVal = !sw[key];
-    setSw(s => ({ ...s, [key]: newVal }));
-    playToggleSound(newVal);
-
-    if (key === 'dry' && newVal) {
-      setGlowOrange(false);
-      requestAnimationFrame(() => setTimeout(() => setGlowOrange(true), 10));
-      setTimeout(() => setGlowOrange(false), 2500);
-    }
-    if (key === 'mud' && newVal) {
-      playPopSound();
-      setShowMud(true);
-      setTimeout(() => setShowMud(false), 2200);
-    }
-    if (key === 'samuel' && newVal) {
-      setTimeout(() => onNext(), 1400);
-    }
+  const handleOpen = (idx) => {
+    if (opened.includes(idx)) return;
+    playOpenSound();
+    setOpened(o => [...o, idx]);
   };
 
-  return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden transition-all duration-700"
-      style={{
-        background: 'linear-gradient(180deg, #0f172a 0%, #1c1917 100%)',
-        boxShadow: glowOrange ? 'inset 0 0 160px 60px rgba(251,146,60,0.3)' : 'none',
-        transition: 'box-shadow 0.5s ease'
-      }}>
+  const allOpened = opened.length === CARDS.length;
 
+  return (
+    <div className="relative min-h-screen flex flex-col items-center justify-center px-4 py-12 overflow-hidden"
+      style={{ background: 'linear-gradient(180deg, #0f172a 0%, #1c1108 60%, #0f172a 100%)' }}>
+
+      {/* Header */}
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold mb-1" style={{ color: '#fbbf24' }}>🛡️ Escudo Térmico</h2>
-        <p className="text-sm" style={{ color: '#57534e' }}>
-          Panel de emergencia — Punchao, Lima
+        <p className="text-xs font-mono tracking-widest uppercase mb-2" style={{ color: '#57534e' }}>
+          — cartas para Saly —
+        </p>
+        <h2 className="text-2xl font-bold" style={{ color: '#fbbf24' }}>
+          Cosas que no te dije
+        </h2>
+        <p className="text-sm mt-1" style={{ color: '#57534e' }}>
+          Toca cada sobre para abrirlo 💌
         </p>
       </div>
 
-      {/* Panel */}
-      <div className="w-full max-w-sm rounded-2xl p-7 backdrop-blur-sm"
-        style={{
-          background: 'rgba(15,23,42,0.85)',
-          border: '1px solid rgba(71,85,105,0.4)',
-          boxShadow: '0 25px 50px rgba(0,0,0,0.6)'
-        }}>
+      {/* Cards grid */}
+      <div className="grid grid-cols-2 gap-4 w-full max-w-sm mb-8">
+        {CARDS.map((card, idx) => {
+          const isOpen = opened.includes(idx);
+          return (
+            <div key={idx}
+              onClick={() => handleOpen(idx)}
+              className="relative rounded-2xl p-4 cursor-pointer select-none transition-all duration-500"
+              style={{
+                background: isOpen ? card.bg : 'rgba(15,23,42,0.9)',
+                border: `1px solid ${isOpen ? card.border : 'rgba(71,85,105,0.35)'}`,
+                boxShadow: isOpen ? `0 8px 32px ${card.border}` : '0 4px 12px rgba(0,0,0,0.4)',
+                transform: isOpen ? 'scale(1.03)' : 'scale(1)',
+                minHeight: '9rem',
+              }}>
 
-        <SwitchRow
-          icon="🧥" label="Secar ropa mojada"
-          sub="Termosecado de emergencia activado"
-          active={sw.dry} onToggle={() => toggle('dry')}
-        />
-        <div className="my-5" style={{ borderTop: '1px solid rgba(71,85,105,0.3)' }} />
-        <SwitchRow
-          icon="👟" label="Limpiar barro de los zapatos"
-          sub={`Carreteras de Punchao: "puro horrible" ✓`}
-          active={sw.mud} onToggle={() => toggle('mud')}
-        />
-        <div className="my-5" style={{ borderTop: '1px solid rgba(71,85,105,0.3)' }} />
-        <SwitchRow
-          icon="🔄" label="Reiniciar humor de Samuel"
-          sub="⚠ Acción: mostrar disculpa sincera"
-          active={sw.samuel} onToggle={() => toggle('samuel')}
-          highlight
-        />
+              {/* Envelope flap animation */}
+              {!isOpen ? (
+                <div className="flex flex-col items-center justify-center h-full gap-2 py-2">
+                  <div className="text-3xl" style={{ filter: 'grayscale(0.4)' }}>💌</div>
+                  <p className="text-xs text-center" style={{ color: '#44403c' }}>toca para abrir</p>
+                </div>
+              ) : (
+                <div className="animate-fade-in">
+                  <div className="text-2xl mb-2">{card.emoji}</div>
+                  <p className="text-xs font-semibold mb-1" style={{ color: card.color, fontFamily: "'Caveat', cursive", fontSize: '0.95rem' }}>
+                    {card.title}
+                  </p>
+                  <p className="text-xs leading-relaxed" style={{ color: '#d6d3d1', fontFamily: "'Caveat', cursive", fontSize: '0.85rem' }}>
+                    {card.body}
+                  </p>
+                  <p className="text-xs mt-2 text-right" style={{ color: card.color, opacity: 0.7, fontFamily: "'Caveat', cursive" }}>
+                    {card.from}
+                  </p>
+                </div>
+              )}
+
+              {/* Seal */}
+              {!isOpen && (
+                <div className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center text-xs"
+                  style={{ background: 'rgba(180,83,9,0.3)', border: '1px solid rgba(251,191,36,0.3)' }}>
+                  🔒
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
-      {/* Status */}
-      <div className="mt-6 h-10 flex items-center justify-center">
-        {glowOrange && (
-          <p className="text-sm font-medium animate-pulse" style={{ color: '#fb923c' }}>
-            🔥 Calor activado — ropa secándose a toda velocidad...
-          </p>
-        )}
-        {showMud && (
-          <p className="text-sm font-medium animate-fade-in" style={{ color: '#fbbf24' }}>
-            ✨ ¡POP! Barro de Punchao eliminado. Zapatos limpios. 
-          </p>
-        )}
-        {sw.samuel && !glowOrange && !showMud && (
-          <p className="text-sm font-medium animate-pulse" style={{ color: '#34d399' }}>
-            ♻ Cargando disculpa sincera... 
-          </p>
-        )}
+      {/* Progress */}
+      <div className="flex gap-2 mb-6">
+        {CARDS.map((_, i) => (
+          <div key={i} className="w-2 h-2 rounded-full transition-all duration-500"
+            style={{ background: opened.includes(i) ? '#d97706' : '#292524' }} />
+        ))}
       </div>
-    </div>
-  );
-}
 
-function SwitchRow({ icon, label, sub, active, onToggle, highlight }) {
-  return (
-    <div className="flex items-center justify-between gap-4">
-      <div className="flex items-center gap-3">
-        <span className="text-xl">{icon}</span>
-        <div>
-          <p className="font-semibold text-sm" style={{ color: highlight ? '#fbbf24' : '#e2e8f0' }}>{label}</p>
-          <p className="text-xs mt-0.5" style={{ color: '#57534e' }}>{sub}</p>
+      {/* Continue button, shows after all opened */}
+      {allOpened && (
+        <div className="flex flex-col items-center gap-3 animate-fade-in">
+          <p className="text-sm italic" style={{ color: '#a78bfa' }}>
+            ✨ Ya leíste todo lo que quería decirte ✨
+          </p>
+          <button onClick={onNext}
+            className="px-8 py-3 rounded-2xl font-bold text-white transition-all duration-300 hover:scale-105 active:scale-95"
+            style={{
+              fontFamily: "'Caveat', cursive",
+              fontSize: '1.1rem',
+              background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
+              boxShadow: '0 8px 28px rgba(124,58,237,0.4)'
+            }}>
+            Seguir → 💌
+          </button>
         </div>
-      </div>
-      <button onClick={onToggle}
-        className="relative inline-flex shrink-0 cursor-pointer rounded-full border-2 transition-all duration-300 focus:outline-none"
-        style={{
-          width: '3.5rem', height: '1.75rem',
-          background: active ? (highlight ? '#d97706' : '#10b981') : '#374151',
-          borderColor: active ? (highlight ? '#f59e0b' : '#34d399') : '#4b5563'
-        }}>
-        <span className="inline-block rounded-full shadow-lg transform transition-transform duration-300"
-          style={{
-            width: '1.25rem', height: '1.25rem',
-            marginTop: '0.125rem',
-            background: 'white',
-            transform: active ? 'translateX(1.75rem)' : 'translateX(0.125rem)'
-          }} />
-      </button>
+      )}
     </div>
   );
 }

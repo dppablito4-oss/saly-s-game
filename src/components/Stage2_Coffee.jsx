@@ -3,10 +3,10 @@ import { gsap } from 'gsap';
 
 // Mensajes basados en el chat real — él le dijo "tómate un cafecito o algo caliente"
 const MESSAGES = [
-  { text: "Primer sorbo... el frío se va de tus manos ☕", sub: "(él te lo dijo: 'tómate algo caliente')" },
-  { text: "Segundo sorbo... ya no tiemblas tanto 🌡️", sub: "ya encontraste la tienda, ¿no?" },
-  { text: "Tercer sorbo... ya casi no hay barro en Punchao 😌", sub: "(mentira, sus carreteras están horrible)" },
-  { text: "Cuarto sorbo... perdón por lo que dije 🥺", sub: "no era mi intención hacerte sentir mal" },
+  { text: "Primer sorbo... el frío se va de tus manos ☕", sub: "(te dije: 'tómate algo caliente')" },
+  { text: "Segundo sorbo... ya no tiemblas tanto 🌡️", sub: "(un sorbito mas y estaras bien 😌)" },
+  { text: "Tercer sorbo... ya te sientes mejor? 😌", sub: "(espero que si estes bien)" },
+  { text: "Cuarto sorbo... y umm... perdóname por lo que dije antes SALY🥺", sub: "no era mi intención hacerte sentir mal" },
 ];
 
 const MAX_SIPS = MESSAGES.length;
@@ -23,7 +23,7 @@ function playSipSound() {
     gain.gain.setValueAtTime(0.3, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
     osc.start(); osc.stop(ctx.currentTime + 0.4);
-  } catch(e) {}
+  } catch (e) { }
 }
 
 export default function Stage2_Coffee({ onNext }) {
