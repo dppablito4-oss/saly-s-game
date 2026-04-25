@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Stage1_Rain from './components/Stage1_Rain'
 import Stage2_Coffee from './components/Stage2_Coffee'
 import Stage3_ControlPanel from './components/Stage3_ControlPanel'
