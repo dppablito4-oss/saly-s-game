@@ -190,6 +190,14 @@
         }
 
         .meteo span { font-size: 1.4rem; }
+        /* Game styles */
+        .game { margin-top: 18px; }
+        .game-start { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
+        #playerName { padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); color: var(--text); width: 100%; max-width: 220px; }
+        .game-step { padding: 14px 12px; text-align: center; }
+        #confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 9999; }
+        .confetti-piece { position: absolute; top: -10vh; width: 8px; height: 12px; border-radius: 2px; transform-origin: center; animation: confetti-fall 3200ms linear forwards; }
+        @keyframes confetti-fall { to { transform: translateY(120vh) rotate(720deg); opacity: 0.9; } }
     </style>
 </head>
 <body>
@@ -212,11 +220,44 @@
                     <span></span><span></span><span></span>
                 </div>
             </div>
-
+ 
             <button id="heatBtn" onclick="calentar()">¡DAR CALOR! ♨️</button>
 
             <div class="message" id="message">
                 Presiona el botón para transformar mis palabras en un abrazo cálido. Cada clic sube la temperatura y cambia el ánimo.
+            </div>
+
+            <div class="game">
+                <div class="game-start">
+                    <input id="playerName" placeholder="Escribe su nombre (ej. Mariana)" />
+                    <button id="startGameBtn" onclick="startGame()">Jugar: Sorprenderla 🎮</button>
+                </div>
+
+                <div id="gamePanel" class="hidden">
+                    <div id="step1" class="game-step">
+                        <strong>Paso 1: ¿Llevó cambio seco?</strong>
+                        <div style="margin-top:10px; display:flex; gap:10px;">
+                            <button onclick="chooseOption(1,'si')">Sí, lleva cambio</button>
+                            <button onclick="chooseOption(1,'no')">No, se mojó</button>
+                        </div>
+                    </div>
+
+                    <div id="step2" class="game-step hidden">
+                        <strong>Paso 2: Elige una frase para animarla</strong>
+                        <div style="margin-top:10px; display:flex; gap:10px; flex-direction:column;">
+                            <button onclick="chooseOption(2,'1')">Te mando un abrazo grande.</button>
+                            <button onclick="chooseOption(2,'2')">Cuando vuelvas, te doy chocolate.</button>
+                            <button onclick="chooseOption(2,'3')">Cuídate mucho, piensa en mí.</button>
+                        </div>
+                    </div>
+
+                    <div id="step3" class="game-step hidden">
+                        <strong>Paso 3: Enviar cariño</strong>
+                        <div style="margin-top:10px;">
+                            <button onclick="finishGame()">Enviar y celebrar 🎉</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="info">
@@ -246,17 +287,89 @@
             if (t === 15) {
                 msg.innerText = "Ya no hace tanto frío, ¿no? Recuerda llevar tu cambio seco esta vez.";
             } else if (t === 30) {
-                msg.innerText = "Nivel de 'palabras hirientes' bajando al 50%. Aquí solo hay buena onda.";
+                msg.innerText = "Nivel de buena onda subiendo. Aquí solo hay buena vibra.";
             } else if (t === 50) {
-                msg.innerText = "Iniciando protocolo de disculpa por ser un frío de mda... Te mereces un abrazo que no sea virtual.";
+                msg.innerText = "Iniciando protocolo de disculpa... Te mereces un abrazo que no sea virtual.";
             } else if (t >= 80) {
                 tempDiv.style.color = "#ffb0b0";
-                msg.innerHTML = "<strong>LOG COMPLETADO:</strong><br>Perdón por ser tan directo, sigo aprendiendo a ser humano xd. <br><br>Si te mojaste, date un rato para secarte, ponte algo cómodo y recuerda que estoy aquí para ti. ❤️";
+                msg.innerHTML = "<strong>LOG COMPLETADO:</strong><br>Perdón si fui brusco antes. Secate, ponte algo cómodo y recuerda que te mando un abrazo grande. ❤️";
                 button.classList.add('hidden');
             } else {
                 msg.innerText = "Gracias por estar leyendo. Cada clic aumenta el calor y la buena vibra.";
             }
         }
+
+        // --- Juego interactivo ---
+        const gamePanel = document.getElementById('gamePanel');
+        let gameState = { name: '', step1: null, phrase: null };
+
+        function startGame() {
+            const nameInput = document.getElementById('playerName');
+            gameState.name = nameInput.value.trim() || 'mi amor';
+            if (gamePanel) gamePanel.classList.remove('hidden');
+            document.getElementById('startGameBtn').disabled = true;
+            showStep(1);
+            msg.innerText = `Listo para sorprender a ${gameState.name}. Sigue los pasos.`;
+        }
+
+        function showStep(n) {
+            for (let i = 1; i <= 3; i++) {
+                const el = document.getElementById('step' + i);
+                if (!el) continue;
+                if (i === n) el.classList.remove('hidden'); else el.classList.add('hidden');
+            }
+        }
+
+        function chooseOption(step, val) {
+            if (step === 1) {
+                gameState.step1 = val;
+                if (val === 'no') {
+                    t += 15;
+                    tempDiv.innerText = t + "°C";
+                    msg.innerText = `${gameState.name} se mojó — le mandé calor extra.`;
+                } else {
+                    t += 8;
+                    tempDiv.innerText = t + "°C";
+                    msg.innerText = `${gameState.name} tiene cambio, todo bajo control.`;
+                }
+                showStep(2);
+            } else if (step === 2) {
+                gameState.phrase = val;
+                let phraseText = val === '1' ? 'Te mando un abrazo grande.' : val === '2' ? 'Cuando vuelvas, te doy chocolate.' : 'Cuídate mucho, piensa en mí.';
+                msg.innerText = `Frase elegida: "${phraseText}"`;
+                showStep(3);
+            }
+        }
+
+        function finishGame() {
+            const name = gameState.name;
+            let chosen = gameState.phrase;
+            let phraseText = chosen === '1' ? 'Te mando un abrazo grande.' : chosen === '2' ? 'Cuando vuelvas, te doy chocolate.' : 'Cuídate mucho, piensa en mí.';
+            msg.innerHTML = `<strong>Enviado a ${name}:</strong><br>${phraseText} ❤️`;
+            spawnConfetti();
+            if (gamePanel) gamePanel.classList.add('hidden');
+            document.getElementById('startGameBtn').disabled = false;
+        }
+
+        function spawnConfetti() {
+            const colors = ['#FF5C5C', '#FBCFE8', '#FDE68A', '#34D399', '#60A5FA', '#A78BFA'];
+            const confetti = document.getElementById('confetti');
+            if (!confetti) return;
+            for (let i = 0; i < 40; i++) {
+                const el = document.createElement('div');
+                el.className = 'confetti-piece';
+                el.style.left = (Math.random() * 100) + '%';
+                el.style.background = colors[Math.floor(Math.random() * colors.length)];
+                el.style.width = Math.floor(Math.random() * 10 + 6) + 'px';
+                el.style.height = Math.floor(Math.random() * 8 + 8) + 'px';
+                el.style.transform = `translateY(-10vh) rotate(${Math.random() * 360}deg)`;
+                el.style.animationDelay = (Math.random() * 300) + 'ms';
+                el.style.opacity = (Math.random() * 0.5 + 0.5);
+                confetti.appendChild(el);
+                setTimeout(() => el.remove(), 3800);
+            }
+        }
     </script>
+    <div id="confetti"></div>
 </body>
 </html>
