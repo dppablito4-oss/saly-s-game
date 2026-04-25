@@ -38,7 +38,7 @@ export default function Stage1_Rain({ onActivate }) {
         {/* Distrito badge */}
         <div className="flex items-center gap-2 text-slate-500 text-xs font-mono tracking-widest uppercase">
           <span className="inline-block w-4 h-px bg-slate-600" />
-          Distrito de Punchao — Lima, Perú
+          Punchao - Huamalíes - Huánuco
           <span className="inline-block w-4 h-px bg-slate-600" />
         </div>
 
