@@ -3,15 +3,13 @@ import React, { useState, useEffect, useRef } from 'react';
 // Mensaje actualizado — ella YA lo perdonó, así que el tono cambia
 const FULL_TEXT = `Sé que lo que dije no fue justo.
 
-"Te enfermas por descuido tuyo" —
-esas palabras no debí decirlas.
-Lo que necesitabas era que estuviera
-ahí contigo, no juzgarte.
+"Decir que era tu 'descuido' fue un error; 
+lo que realmente necesitaba decirte era que quería estar ahí para 
+cuidarte. No era momento de juzgar, sino de acompañarte.
 
-Sé que ya me perdonaste con un "Está bien".
-Pero igual quería construirte esto.
-Porque un "okey" tuyo vale mucho,
-y yo quería estar a la altura de eso.
+Sé que ya me perdonaste, pero quería construirte este 
+rincón virtual. Porque un 'okey' tuyo vale muchísimo para mí, 
+y quería esforzarme para estar a la altura de lo que mereces.
 
 ¿Ya tienes calor, Saly? 🥺`;
 
@@ -30,7 +28,7 @@ function playChime() {
       gain.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
       osc.start(t); osc.stop(t + 0.7);
     });
-  } catch(e) {}
+  } catch (e) { }
 }
 
 export default function Stage4_Redemption() {
@@ -82,7 +80,7 @@ export default function Stage4_Redemption() {
         g.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
         o.start(t); o.stop(t + 0.5);
       });
-    } catch(e) {}
+    } catch (e) { }
   };
 
   return (
