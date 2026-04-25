@@ -57,7 +57,7 @@ export default function Stage1_Rain({ onActivate }) {
           <TerminalLine delay={2300} text="● Ropa de Saly: [ MOJADA ]" color="text-yellow-400" />
           <TerminalLine delay={3000} text='● Cambio de ropa llevado: [ NO 🥺 ]' color="text-orange-400" />
           <TerminalLine delay={3700} text="● Tiendas cercanas: [ Solo de dulces ]" color="text-slate-400" />
-          <TerminalLine delay={4400} text='● Error detectado: Samuel dijo "te enfermas por descuido tuyo"' color="text-red-400" />
+          <TerminalLine delay={4400} text='● Error detectado: dije "te enfermas por descuido tuyo"' color="text-red-400" />
           <TerminalLine delay={5200} text='● Respuesta de Saly: "💔' color="text-red-300" />
           <TerminalLine delay={6000} text="● Estado actual de Saly: [ Está bien, te perdono 🥺 ]" color="text-emerald-400" />
           <TerminalLine delay={6800} text="▸ Iniciando PROTOCOLO DE CAFESITO CALIENTE v3.0..." color="text-amber-400" blink />
