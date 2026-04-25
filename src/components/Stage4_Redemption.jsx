@@ -173,6 +173,22 @@ export default function Stage4_Redemption() {
                   Enviar respuesta ✉️
                 </button>
               </form>
+              
+              <div className="mt-6 pt-4 border-t border-amber-900/10 text-center">
+                <p className="text-[10px] uppercase tracking-widest text-slate-600 mb-4">
+                  Developed by Samuel (pablitodp)
+                </p>
+                <a 
+                  href="https://wa.me/51918165428?text=He%20visto%20lo%20que%20enviaste%20y%20..."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-xs text-amber-900/60 hover:text-amber-500 transition-colors"
+                  style={{ fontFamily: "'Inter', sans-serif" }}
+                >
+                  <span>¿Prefieres avisarme por WhatsApp?</span>
+                  <span className="bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full text-[10px]">918165428</span>
+                </a>
+              </div>
             </div>
           </div>
         )}
