@@ -62,6 +62,28 @@ export default function Stage4_Redemption() {
   const [candyPhase, setCandyPhase] = useState('none'); // none, intro, play, final
   const [eatenCount, setEatenCount] = useState(0);
   const [candies, setCandies] = useState(CANDIES.map(c => ({ ...c, eaten: false })));
+  const [formStatus, setFormStatus] = useState('idle'); // idle, sending, success, error
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormStatus('sending');
+    const formData = new FormData(e.target);
+    
+    try {
+      const response = await fetch('https://formspree.io/f/mykloova', {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (response.ok) {
+        setFormStatus('success');
+      } else {
+        setFormStatus('error');
+      }
+    } catch (e) {
+      setFormStatus('error');
+    }
+  };
 
   useEffect(() => {
     let i = 0;
@@ -215,27 +237,47 @@ export default function Stage4_Redemption() {
             <p className="text-sm mb-4" style={{ fontFamily: "'Caveat', cursive", color: '#a16207' }}>
               Si quieres decirme algo, puedes escribirlo aquí y me llegará directo:
             </p>
-            <form action="https://formspree.io/f/mykloova" method="POST" className="flex flex-col gap-3">
-              <textarea 
-                name="mensaje"
-                placeholder="Escribe aquí..."
-                className="w-full p-3 rounded-xl bg-black/40 border border-amber-900/30 text-amber-100 placeholder-amber-900/40 focus:outline-none focus:border-amber-500 transition-colors"
-                style={{ fontFamily: "'Caveat', cursive", fontSize: '1.1rem' }}
-                rows="3"
-                required
-              ></textarea>
-              <button 
-                type="submit"
-                className="px-6 py-2 rounded-xl font-bold text-white transition-all duration-300 hover:scale-105 active:scale-95 self-end"
-                style={{ 
-                  fontFamily: "'Caveat', cursive", 
-                  background: 'linear-gradient(135deg, #b45309, #d97706)',
-                  fontSize: '1rem'
-                }}
-              >
-                Enviar respuesta ✉️
-              </button>
-            </form>
+            {formStatus === 'success' ? (
+              <div className="py-8 text-center animate-fade-in">
+                <p className="text-2xl mb-2">✨💌✨</p>
+                <p className="text-xl" style={{ fontFamily: "'Caveat', cursive", color: '#fbbf24' }}>
+                  ¡Mensaje enviado con éxito! <br/> Gracias por escribirme, Saly.
+                </p>
+                <button 
+                  onClick={() => setFormStatus('idle')}
+                  className="mt-4 text-xs text-amber-900/40 hover:text-amber-500 underline"
+                >
+                  Enviar otro mensaje
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                <textarea 
+                  name="mensaje"
+                  placeholder="Escribe aquí..."
+                  className="w-full p-3 rounded-xl bg-black/40 border border-amber-900/30 text-amber-100 placeholder-amber-900/40 focus:outline-none focus:border-amber-500 transition-colors"
+                  style={{ fontFamily: "'Caveat', cursive", fontSize: '1.1rem' }}
+                  rows="3"
+                  required
+                  disabled={formStatus === 'sending'}
+                ></textarea>
+                <button 
+                  type="submit"
+                  disabled={formStatus === 'sending'}
+                  className={`px-6 py-2 rounded-xl font-bold text-white transition-all duration-300 hover:scale-105 active:scale-95 self-end ${formStatus === 'sending' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  style={{ 
+                    fontFamily: "'Caveat', cursive", 
+                    background: 'linear-gradient(135deg, #b45309, #d97706)',
+                    fontSize: '1rem'
+                  }}
+                >
+                  {formStatus === 'sending' ? 'Enviando...' : 'Enviar respuesta ✉️'}
+                </button>
+                {formStatus === 'error' && (
+                  <p className="text-xs text-red-500 text-right">Hubo un error. Inténtalo de nuevo.</p>
+                )}
+              </form>
+            )}
             
             <div className="mt-8 pt-4 border-t border-amber-900/10 text-center">
               <p className="text-[10px] uppercase tracking-widest text-slate-600 mb-4">
